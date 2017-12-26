@@ -58,7 +58,6 @@ int main()
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
           double steer_value = 0.0;
-          double throttle = 0.4;
 
           /*
           * TODO: Calcuate steering value here, remember the steering value is
@@ -70,12 +69,52 @@ int main()
           pid.UpdateError(cte);
           steer_value -= pid.TotalError();
 
+          static double throttle = 1;
+          static bool brake = false;
+          brake = false;
+
+          if ((fabs(cte - pid.pre_cte) > 0.12) && brakeCounter == 0)
+          {
+            brakeCounter = 5;
+            brake = true;
+            std::cout << "brake: " << brake << std::endl;
+          }
+
+          // Throttle control. Brake when speed is over 28MPH
+          const double target_speed = 28;
+          std::cout << "Speed: " << speed << std::endl;
+
+          if (!brake)
+          {
+            if (speed < target_speed)
+            {
+              throttle += 0.1;
+              if (throttle > 1)
+                throttle = 1;
+            }
+            else if (speed > target_speed)
+            {
+              throttle = 0.5;
+            }
+          }
+          else
+          {
+            throttle = -0.0;
+            brakeCounter--;
+            if (brakeCounter == 0)
+            {
+              throttle = 1;
+              brake = false;
+            }
+            std::cout << brakeCounter << std::endl;
+          }
+
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
-          msgJson["throttle"] = 0.3;
+          msgJson["throttle"] = throttle;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);

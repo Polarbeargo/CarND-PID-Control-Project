@@ -12,6 +12,11 @@ public:
   double d_error;
 
   /*
+  * cross track error components
+  */
+  double pre_cte;
+
+  /*
   * Coefficients
   */
   double Kp;
