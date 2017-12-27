@@ -95,7 +95,7 @@ int main()
             }
             else if (speed > target_speed)
             {
-              throttle = 0.5;
+              throttle = 0.8;
             }
           }
           else
