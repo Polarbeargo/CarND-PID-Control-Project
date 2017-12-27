@@ -70,8 +70,9 @@ int main()
           steer_value -= pid.TotalError();
 
           static double throttle = 1;
+          static int brakeCounter = 0;
           static bool brake = false;
-          brake = false;
+          
 
           if ((fabs(cte - pid.pre_cte) > 0.12) && brakeCounter == 0)
           {
