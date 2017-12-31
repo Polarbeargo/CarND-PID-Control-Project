@@ -81,7 +81,7 @@ int main()
           }
 
           // Throttle control. Brake when speed is over 28MPH
-          const double target_speed = 28;
+          const double target_speed = 25;
           std::cout << "Speed: " << speed << std::endl;
 
           if (!brake)
