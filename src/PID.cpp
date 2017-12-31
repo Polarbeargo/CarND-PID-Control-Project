@@ -25,7 +25,7 @@ void PID::UpdateError(double cte)
     double pre_cte = cte;
     p_error = Kp * cte;
     i_error += cte;
-    d_error = cte - p_error;
+    d_error = cte - pre_cte;
 
     // Add debug log
     cout << "Kp = "
