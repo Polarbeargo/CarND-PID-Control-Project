@@ -72,7 +72,6 @@ int main()
           static double throttle = 1;
           static int brakeCounter = 0;
           static bool brake = false;
-          
 
           if ((fabs(cte - pid.pre_cte) > 0.12) && brakeCounter == 0)
           {
