@@ -32,17 +32,19 @@ void PID::UpdateError(double cte)
     // TODO Sharp turn track correct back to center of road
     if (cte > 4)
     {
-        // d_error = Kd * (cte - p_error);
+        Kp = 0.15;
         Ki = 0.1;
         Kd = 0;
     }
-    else if (cte < -6)
+    else if (cte < -5)
     {
+        Kp = -0.15;
         Ki = -0.1;
         Kd = 0;
     }
     else
     {
+        Kp = 0.2;
         Ki = 0;
         Kd = 0;
     }
