@@ -44,6 +44,9 @@ int main()
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
+
+    PID pid_throttle;
+
     if (length && length > 2 && data[0] == '4' && data[1] == '2')
     {
       auto s = hasData(std::string(data).substr(0, length));
@@ -92,9 +95,11 @@ int main()
               if (throttle > 1)
                 throttle = 1;
             }
-            else if (speed > target_speed)
+            else if (speed > target_speed || (fabs(cte - pid.pre_cte) > 0.12))
             {
-              throttle = 0.8;
+              pid_throttle.Init(0.45, 0.000, 0.5);
+              double max_throttle = 0.8;
+              throttle = pid_throttle.OutputThrottle(max_throttle);
             }
           }
           else
@@ -103,7 +108,9 @@ int main()
             brakeCounter--;
             if (brakeCounter == 0)
             {
-              throttle = 1;
+              pid_throttle.Init(0.45, 0.000, 0.5);
+              double normal_throttle = 1;
+              throttle = pid_throttle.OutputThrottle(normal_throttle);
               brake = false;
             }
             std::cout << brakeCounter << std::endl;
