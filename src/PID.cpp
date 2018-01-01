@@ -22,6 +22,8 @@ void PID::Init(double Kp, double Ki, double Kd)
 
 void PID::UpdateError(double cte)
 {
+    // Initial Kp = 0.2 keep car correct back to center of road
+    Kp = 0.2;
     double pre_cte = cte;
     p_error = Kp * cte;
     i_error += Ki * cte;
