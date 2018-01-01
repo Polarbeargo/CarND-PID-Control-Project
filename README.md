@@ -3,6 +3,49 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+## Introduction
+Autonomous driving with PID controllers to control the steering angle and the throttle for driving a autonomous vehicle 
+in Udacity simulator. The simulator provides cross-track error (CTE) via websocket. The PID 
+(proportional-integral-differential) controllers give steering and throttle commands 
+to drive the car reliably around the simulator track.
+
+### Parameters of PID controller
+
+* **P** (proportional) accounts for present values of the error. For example, if the error is large and positive, 
+the control output will also be large and positive.
+
+* **I** (integral) accounts for all past values of the error. For example, if the current output is not sufficiently 
+strong, the integral of the error will accumulate over time, and the controller will respond by 
+applying a stronger action.
+
+* **D** (differential) accounts for possible future trends of the error, based on its current rate of change.
+
+**Finally parameters**
+
+* PID parameters used for **steering angles**: 
+
+    * p value: 0.15 
+    * i value: 0.0
+    * d value: 2.5
+
+* PID parameters used for **throttle**: 
+
+    * p value: 0.45 
+    * i value: 0.000
+    * d value: 0.5
+    
+**Parameters Tuning**
+
+Follow Udacity reviewer's suggestion(https://udacity-reviews-uploads.s3.amazonaws.com/_attachments/41330/1493863065/pid_control_document.pdf)
+
+1. Set I and D coefficients to 0 and concentrate on P. Find a good coefficient value that oscillates on track but performs well on road.
+
+2. Then add D coefficient to counter oscillation without hurting P's ability to correct back to center of road.
+
+3. If you see a bias in vehicle controls, add I coeffient to counter that effect.
+
+I implemented throttle control. Brake when speed is over 28MPH then set initial Kp = 0.2 keep car better correct back to center of road. Set throttle to 0.8 when speed > 28MPH. Changed p_error to Kp * cte, i_error += Ki * cte and d_error = Kd *  (cte - pre_cte). Add Sharp turn track correct back to center of road TODO Condition, set Kd =0.1, Add computing OutpuThrottle function, add pid_throttle.
+
 ## Dependencies
 
 * cmake >= 3.5
