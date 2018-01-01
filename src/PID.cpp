@@ -39,7 +39,7 @@ void PID::UpdateError(double cte)
     else if (cte < -5)
     {
         Kp = -0.15;
-        Ki = -0.1;
+        Ki = -0.05;
         Kd = 0.5;
     }
     else
