@@ -28,17 +28,28 @@ void PID::UpdateError(double cte)
     Kd = 0.1;
 
     double pre_cte = cte;
+
+    // TODO Sharp turn track correct back to center of road
+    if (cte > 4)
+    {
+        // d_error = Kd * (cte - p_error);
+        Ki = 0.1;
+        Kd = 0;
+    }
+    else if (cte < -6)
+    {
+        Ki = -0.1;
+        Kd = 0;
+    }
+    else
+    {
+        Ki = 0;
+        Kd = 0;
+    }
+
     p_error = Kp * cte;
     i_error += Ki * cte;
     d_error = Kd * (cte - pre_cte);
-
-    //TODO Sharp turn track correct back to center of road
-    if ((fabs(cte - pre_cte) > 0.12))
-    {
-        d_error = Kd * (cte - p_error);
-        Ki = 0.2;
-        i_error += Ki * cte;
-    }
 
     // Add debug log
     cout << "Kp = "
