@@ -95,10 +95,10 @@ int main()
               if (throttle > 1)
                 throttle = 1;
             }
-            else if (speed > target_speed || (fabs(cte - pid.pre_cte) > 0.12))
+            else if (speed > target_speed || (fabs(cte - pid.pre_cte) > 0.12) || angle > 7 || angle < -7)
             {
               pid_throttle.Init(0.45, 0.000, 0.5);
-              double max_throttle = 0.8;
+              double max_throttle = -1;
               throttle = pid_throttle.OutputThrottle(max_throttle);
             }
           }

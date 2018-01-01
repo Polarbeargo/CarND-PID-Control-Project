@@ -34,13 +34,13 @@ void PID::UpdateError(double cte)
     {
         Kp = 0.15;
         Ki = 0.1;
-        Kd = 0;
+        Kd = 0.1;
     }
     else if (cte < -5)
     {
         Kp = -0.15;
         Ki = -0.1;
-        Kd = 0;
+        Kd = 0.5;
     }
     else
     {
