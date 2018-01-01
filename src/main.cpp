@@ -38,7 +38,7 @@ int main()
   PID pid;
 
   // TODO: Initialize the pid variable.
-  pid.Init(0.15, 0.0, 2.5);
+  pid.Init(0.15, 0.001, 2.5);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -95,10 +95,11 @@ int main()
               if (throttle > 1)
                 throttle = 1;
             }
-            else if (speed > target_speed || (fabs(cte - pid.pre_cte) > 0.12) || angle > 7 || angle < -7)
+            else if (speed > target_speed || (fabs(cte - pid.pre_cte) > 0.12) || angle > 7 || angle < -7 || cte > 4 || cte < -5)
             {
               pid_throttle.Init(0.45, 0.000, 0.5);
               double max_throttle = -1;
+              throttle = -1;
               throttle = pid_throttle.OutputThrottle(max_throttle);
             }
           }
@@ -108,7 +109,7 @@ int main()
             brakeCounter--;
             if (brakeCounter == 0)
             {
-              pid_throttle.Init(0.45, 0.000, 0.5);
+              pid_throttle.Init(0.15, 0.001, 2.5);
               double normal_throttle = 1;
               throttle = pid_throttle.OutputThrottle(normal_throttle);
               brake = false;
