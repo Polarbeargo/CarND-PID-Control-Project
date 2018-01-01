@@ -14,11 +14,11 @@ to drive the car reliably around the simulator track.
 * **P** (proportional) The proportional term present values of the error if the error is large and positive, 
 the control output will also be large and positive.
 
-* **I** (integral) The derivative term present all past values of the error if the current output is not sufficiently 
+* **I** (integral) The integral term present all past values of the error if the current output is not sufficiently 
 strong, the integral of the error will accumulate over time, and the controller will respond by 
 applying a stronger action.
 
-* **D** (differential) In reality, any control system will have some miss aligment, random noise and drift. The Integral term is to compensate this issue present all possible future trends of the error, based on its current rate of change.
+* **D** (differential) In reality, any control system will have some miss aligment, random noise and drift. The differential term is to compensate this issue present all possible future trends of the error, based on its current rate of change.
 
 **Finally parameters**
 
