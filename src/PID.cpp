@@ -17,41 +17,16 @@ void PID::Init(double Kp, double Ki, double Kd)
     PID::Kp = Kp;
     PID::Ki = Ki;
     PID::Kd = Kd;
-
+    
     p_error = d_error = i_error = 0.0;
 }
 
 void PID::UpdateError(double cte)
 {
-    // Initial Kp = 0.2 keep car correct back to center of road
-    Kp = 0.2;
-    Kd = 0.1;
-
     double pre_cte = cte;
-
-    // TODO Sharp turn track correct back to center of road
-    if (cte > 4)
-    {
-        Kp = 0.15;
-        Ki = 0.1;
-        Kd = 0.1;
-    }
-    else if (cte < -5)
-    {
-        Kp = -0.15;
-        Ki = -0.05;
-        Kd = 0.5;
-    }
-    else
-    {
-        Kp = 0.2;
-        Ki = 0;
-        Kd = 0;
-    }
-
-    p_error = Kp * cte;
-    i_error += Ki * cte;
-    d_error = Kd * (cte - pre_cte);
+    p_error =  cte;
+    i_error += cte;
+    d_error = cte - pre_cte;
 
     // Add debug log
     cout << "Kp = "

@@ -38,14 +38,12 @@ int main()
   PID pid;
 
   // TODO: Initialize the pid variable.
-  pid.Init(0.15, 0.001, 2.5);
+  pid.Init(0.2, 0.001, 2.8);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
-
-    PID pid_throttle;
 
     if (length && length > 2 && data[0] == '4' && data[1] == '2')
     {
@@ -72,7 +70,7 @@ int main()
           pid.UpdateError(cte);
           steer_value -= pid.TotalError();
 
-          static double throttle = 1;
+          double throttle = 0.3;
           static int brakeCounter = 0;
           static bool brake = false;
 
@@ -97,10 +95,7 @@ int main()
             }
             else if (speed > target_speed || (fabs(cte - pid.pre_cte) > 0.12) || angle > 7 || angle < -7 || cte > 4 || cte < -5)
             {
-              pid_throttle.Init(0.45, 0.001, 0.5);
-              double max_throttle = -1;
               throttle = -1;
-              throttle = pid_throttle.OutputThrottle(max_throttle);
             }
           }
           else
@@ -109,9 +104,7 @@ int main()
             brakeCounter--;
             if (brakeCounter == 0)
             {
-              pid_throttle.Init(0.15, 0.001, 2.5);
-              double normal_throttle = 1;
-              throttle = pid_throttle.OutputThrottle(normal_throttle);
+              throttle = 1;
               brake = false;
             }
             std::cout << brakeCounter << std::endl;
