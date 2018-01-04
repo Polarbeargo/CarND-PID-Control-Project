@@ -11,28 +11,22 @@ to drive the car reliably around the simulator track.
 
 ### Parameters of PID controller
 
-* **P** (proportional) The proportional term present values of the error if the error is large and positive, 
+* **P** (proportional) The proportional term `p_error = cte` present values of the error if the error is large and positive, 
 the control output will also be large and positive.
 
-* **I** (integral) The integral term present all past values of the error if the current output is not sufficiently 
+* **I** (integral) The integral term `i_error += cte` present all past values of the error if the current output is not sufficiently 
 strong, the integral of the error will accumulate over time, and the controller will respond by 
 applying a stronger action.
 
-* **D** (differential) In reality, any control system will have some miss aligment, random noise and drift. The differential term is to compensate this issue present all possible future trends of the error, based on its current rate of change.
+* **D** (differential) In reality, any control system will have some miss aligment, random noise and drift. The differential term `d_error = cte - pre_cte` is to compensate this issue present all possible future trends of the error, based on its current rate of change.
 
 **Finally parameters**
 
 * PID parameters used for **steering angles**: 
 
-    * p value: 0.15 
-    * i value: 0.001
-    * d value: 2.5
-
-* PID parameters used for **throttle**: 
-
-    * p value: 0.45 
-    * i value: 0.001
-    * d value: 0.5
+    * p value: 4.7 
+    * i value: 0.00481
+    * d value: 4.55
     
 **Parameters Tuning**
 
@@ -46,35 +40,14 @@ Follow Udacity reviewer's suggestion(https://udacity-reviews-uploads.s3.amazonaw
 
 4. Add a larger integral coefficient value so that your car will work better on sharp turns.
 
-5. Consider lowering the throttle (IE slowing down) when the cross track error (cte) is high. IE
+5. Consider lowering the throttle (IE slowing down) when the cross track error (cte) is high.
 
-I implemented throttle control. Brake when speed is over 28MPH then set initial Kp = 0.2 keep car better correct back to center of road. Set throttle to -1 when speed > 25MPH or angle > 7 or angle < -7 or cte > 4 or cte < -5 . Changed p_error to Kp * cte, i_error += Ki * cte and d_error = Kd *  (cte - pre_cte). Add Sharp turn track correct back to center of road TODO Condition, set Kd =0.1, Add computing OutpuThrottle function, add pid_throttle.
+6. Remove throttle PID controller.
 
-```
-// TODO Sharp turn track correct back to center of road
-    if (cte > 4)
-    {
-        Kp = 0.15;
-        Ki = 0.1;
-        Kd = 0.1;
-    }
-    else if (cte < -5)
-    {
-        Kp = -0.15;
-        Ki = -0.05;
-        Kd = 0.5;
-    }
-    else
-    {
-        Kp = 0.2;
-        Ki = 0;
-        Kd = 0;
-    }
-    
-    p_error = Kp * cte;
-    i_error += Ki * cte;
-    d_error = Kd * (cte - pre_cte);
-```
+7. Concentrate on getting steering PID controller correctly configured.
+
+Add `speed_value = -0.3 + 120/fabs(speed*angle);` on throttle input. As autonomous vehicle in High velocity, smaller steering angle and full throttle. large steering angle in sharp turn, reduced the throttle input, at certain position, negative throttle, means brake.   
+In low velocity, any angle, any positive throttle allowed this part should thanks to `ctsuu`.
 
 ## Dependencies
 
