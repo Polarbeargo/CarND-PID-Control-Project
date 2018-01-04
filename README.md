@@ -46,8 +46,7 @@ Follow Udacity reviewer's suggestion(https://udacity-reviews-uploads.s3.amazonaw
 
 7. Concentrate on getting steering PID controller correctly configured.
 
-Add `speed_value = -0.3 + 120/fabs(speed*angle);` on throttle input. As autonomous vehicle in High velocity, smaller steering angle and full throttle. large steering angle in sharp turn, reduced the throttle input, at certain position, negative throttle, means brake.   
-In low velocity, any angle, any positive throttle allowed this part should thanks to `ctsuu`.
+Add `speed_value = -0.3 + 120/fabs(speed*angle);` on throttle input. As autonomous vehicle in High velocity, smaller steering angle and full throttle. large steering angle in sharp turn, reduced the throttle input, at certain position, negative throttle, means brake. In low velocity, any angle, any positive throttle allowed. This part should thanks to `ctsuu`.
 
 ## Dependencies
 
