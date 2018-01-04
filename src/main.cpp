@@ -38,7 +38,16 @@ int main()
   PID pid;
 
   // TODO: Initialize the pid variable.
-  pid.Init(0.2, 0.001, 2.8);
+  // Proportional Only.
+  // pid.Init(1, 0.0, 0.0);
+
+  // Integral Only.
+  // pid.Init(0.0, 1.0, 0.0);
+
+  // Differential Only.
+  // pid.Init(0.0, 0.0, 1.0);
+
+  pid.Init(4.7, 0.00481, 4.55);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -59,6 +68,7 @@ int main()
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
           double steer_value = 0.0;
+          double speed_value;
 
           /*
           * TODO: Calcuate steering value here, remember the steering value is
@@ -67,47 +77,18 @@ int main()
           * another PID controller to control the speed!
           */
 
+          // Update error and calculate steer_value
           pid.UpdateError(cte);
           steer_value -= pid.TotalError();
 
-          double throttle = 0.3;
-          static int brakeCounter = 0;
-          static bool brake = false;
-
-          if ((fabs(cte - pid.pre_cte) > 0.12) && brakeCounter == 0)
+          // Add speed controller
+          if (fabs(speed * angle) < 1)
           {
-            brakeCounter = 5;
-            brake = true;
-            std::cout << "brake: " << brake << std::endl;
-          }
-
-          // Throttle control. Brake when speed is over 28MPH
-          const double target_speed = 25;
-          std::cout << "Speed: " << speed << std::endl;
-
-          if (!brake)
-          {
-            if (speed < target_speed)
-            {
-              throttle += 0.1;
-              if (throttle > 1)
-                throttle = 1;
-            }
-            else if (speed > target_speed || (fabs(cte - pid.pre_cte) > 0.12) || angle > 7 || angle < -7 || cte > 4 || cte < -5)
-            {
-              throttle = -1;
-            }
+            speed_value = 1.0;
           }
           else
           {
-            throttle = -0.0;
-            brakeCounter--;
-            if (brakeCounter == 0)
-            {
-              throttle = 1;
-              brake = false;
-            }
-            std::cout << brakeCounter << std::endl;
+            speed_value = -0.3 + 120 / fabs(speed * angle);
           }
 
           // DEBUG
@@ -115,7 +96,7 @@ int main()
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
-          msgJson["throttle"] = throttle;
+          msgJson["throttle"] = speed_value * 0.5;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);

@@ -47,13 +47,6 @@ public:
   * Calculate the total PID error.
   */
   double TotalError();
-
-  /**
-   * Computing the throttle by PID controller
-   * @param max_throttle max throttle
-   * @return the computed throttle
-   */
-  double OutputThrottle(double max_throttle);
 };
 
 #endif /* PID_H */
