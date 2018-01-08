@@ -4,8 +4,7 @@ Self-Driving Car Engineer Nanodegree Program
 ---
 
 ## Introduction
-Autonomous driving with PID controllers to control the steering angle and the throttle for driving a autonomous vehicle 
-in Udacity simulator. The simulator provides cross-track error (CTE) via websocket. The PID 
+Autonomous driving with PID controllers to control the steering angle and the throttle for driving an autonomous vehicle in Udacity simulator. The simulator provides cross-track error (CTE) via WebSocket. The PID 
 (proportional-integral-differential) controllers give steering and throttle commands 
 to drive the car reliably around the simulator track.
 
@@ -47,6 +46,10 @@ Follow Udacity reviewer's suggestion(https://udacity-reviews-uploads.s3.amazonaw
 7. Concentrate on getting steering PID controller correctly configured.
 
 Add `speed_value = -0.3 + 120/fabs(speed*angle);` on throttle input. As autonomous vehicle in High velocity, smaller steering angle and full throttle. large steering angle in sharp turn, reduced the throttle input, at certain position, negative throttle, means brake. In low velocity, any angle, any positive throttle allowed. This part should thanks to `ctsuu`.
+
+## PID Demo
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Y0216IW0wpM/0.jpg)](https://www.youtube.com/watch?v=Y0216IW0wpM)
 
 ## Dependencies
 
